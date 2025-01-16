@@ -1,7 +1,7 @@
-# Impute-VSS: A GUI-based Visualizer and Summarizer Suite for Data Imputation
+# Impute-VSS: A GUI-based Visualizer and Summarizer Suite for Data Imputation with Gen-AI enabled Interpretation
 
 ## Overview
-Impute-VSS represents an advanced, web-based solution engineered to address the intricate challenges of data imputation. This tool offers a unified interface combining cutting-edge imputation techniques, generative AI-based insights, and modular pipeline capabilities. Designed for both researchers and practitioners, Impute-VSS enables an analytical exploration of missing data, comparative assessments of imputation methods, and detailed visual diagnostics to support data-driven decision-making.
+Impute-VSS represents a web-based solution engineered to address the intricate challenges of data imputation. This tool offers a unified interface combining multiple imputation techniques, generative AI-based insights, and modular pipeline capabilities. Designed for both researchers and practitioners, Impute-VSS enables an analytical exploration of missing data, comparative assessments of imputation methods, and detailed visual diagnostics to support data-driven decision-making.
 
 ---
 
