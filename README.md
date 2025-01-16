@@ -48,7 +48,7 @@ Impute-VSS represents a web-based solution engineered to address the intricate c
 
 ## Support
 - **Documentation**: [Impute-VSS Docs](https://vartul-shrivastava.github.io/ImputeVSS-documentation-github.io/)
-- **Email**: 
+- **Author Emails**: 
   - Vartul Shrivastava: vartul.shrivastava@gmail.com
   - Prof. Shekhar Shukla: shekhars@iimidr.ac.in
 
