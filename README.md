@@ -1,4 +1,4 @@
-![Impute-VSS Dashboard](images/header.png "Impute-VSS Dashboard")
+![Impute-VSS Dashboard](static/images/header.png "Impute-VSS Dashboard")
 
 # Impute-VSS: A GUI-based Visualizer and Summarizer Suite for Data Imputation with Gen-AI enabled Interpretation
 
