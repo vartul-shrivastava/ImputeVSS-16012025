@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ImputeVSS - A Comprehensive Imputation Toolkit</title>
+  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.svg') }}">
+  <!-- Plotly library -->
+  <script src="https://cdn.plot.ly/plotly-2.20.0.min.js"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+  <!-- Loading Overlay -->
+<div id="loadingOverlay" class="loading-overlay" style="display: none;">
+  <div class="loading-content">
+    <p>Please Wait, while ImputeVSS loads your request..</p>
+    <!-- Optionally, you can add a spinner icon here -->
+    <div class="spinner"></div>
+  </div>
+</div>
+<!-- Greeting Overlay -->
+<div id="greetingOverlay" class="greeting-overlay">
+  <div class="greeting-content" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+    <div class="greeting-logo" style="margin-bottom: 20px;">
+      <img src="{{ url_for('static', filename='images/imputevss-front.png') }}" alt="Impute VSS Logo" style="width: 100%; height: auto;"> <hr>
+    </div>
+    <div class="greeting-details" style="text-align: justify;">
+      <p style="color: #004aad; font-size: 1.4rem;">Welcome to the <b>Impute-VSS</b> Dashboard</p>
+      <p>
+        This dashboard is designed to facilitate a comprehensive approach to data imputation. The application provides an intuitive interface that enables users to upload CSV datasets, visualize missing data through heatmaps and interactive charts, and apply a variety of imputation methods including mean, median, mode, constant, KNN, and MICE, among others. <br> <br>  
+        <i style="font-size: small;">In addition to offering robust statistical comparisons between different imputation techniques, the tool supports the creation and management of imputation pipelines, allowing users to save and reapply their chosen strategies with ease. The interface also integrates an AI-based recommendation system powered by Ollama that generates insights based on comparative metrics, thus helping users make informed decisions regarding the best imputation method for their dataset.</i>
+      </p>
+      <button id="proceedBtn" class="nav-btn">Proceed</button>
+      <button id="checkAIDependencyBtn" class="nav-btn">Check AI Dependency</button>
+    </div>
+  </div>
+</div>
+
+
+
+
+  <!-- AI Recommendation Overlay -->
+  <div id="aiOverlay" class="ai-overlay">
+    <div class="ai-overlay-content">
+      <span id="closeOverlay" class="close-overlay">&times;</span>
+      <h2>AI Recommendation</h2>
+      <div id="recommendationOutputOverlay"></div>
+    </div>
+  </div>
+
+
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="logo-section">
+      <img src="{{ url_for('static', filename='images/imputevss-logo.svg') }}" alt="ImputeVSS Logo">
+    </div>
+    <div class="nav-options">
+      <!-- CSV Upload Form -->
+      <form id="uploadForm" method="POST" enctype="multipart/form-data" action="/process-dataset" class="inline-form">
+        <label for="csv-file" class="upload-label">Upload CSV:</label>
+        <input type="file" id="csv-file" name="file" accept=".csv" required />
+        <button type="submit" class="nav-btn">Load Dataset</button>
+      </form>
+      <!-- Pipeline Import Form -->
+      <form id="pipelineUploadForm" method="POST" enctype="multipart/form-data" action="/save-pipeline" class="inline-form">
+        <label for="impvss-file" class="upload-label">Import Pipeline:</label>
+        <input type="file" id="impvss-file" name="file" accept=".impvss" />
+        <button type="submit" class="nav-btn">Load Pipeline</button>
+      </form>
+      <!-- Download Button -->
+      <a class="nav-btn" href="/download-imputed-csv" role="button">Download CSV</a>
+    </div>
+  </nav>
+  <div style="color: #004aad; margin: 200px; align-items: center; text-align: center;" class="welcome-message" id="welcomeMessage">
+    <div class="add-wrapper" style="display: flex;">
+      <img style="width:100%; margin-bottom: 20px;" src="{{ url_for('static', filename='images/imputevss-desc.svg') }}" alt="">
+    </div>
+    <hr>
+    <div class="wrapper" style="display: inline-flex; margin-top: 10px;">
+      <img style="max-width: 40px; margin-right: 10px;" src="{{ url_for('static', filename='images/csv.png') }}" alt="">
+      <p style="margin-top: 10px;">To get started, please upload a CSV file in the navigation bar above.</p>
+    </div>
+  </div>  
+  <!-- Fixed Sidebar -->
+  <aside class="sidebar">
+    <div class="left-section">
+      <!-- Missing Values Heatmap -->
+      <div class="graphs-container">
+        <div id="missing-heatmap" class="graph"></div>
+      </div>
+    </div>
+  </aside>
+<!-- Customize Prompt Overlay -->
+<div id="customizePromptOverlay" class="ai-overlay">
+  <div class="ai-overlay-content" style="margin: 50px auto; padding: 30px; max-width: 600px; border-radius: 8px; position: relative;">
+    <span id="closePromptOverlay" class="close-overlay" style="position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer;">&times;</span>
+    <p style="text-align: left; color: #004aad;"><b>Customize Prompt</b>
+    <br> Include <code>{table}</code> in the prompt for the context to LLM.
+    </p>
+    <textarea id="customPromptTextArea" rows="10" cols="50" placeholder="Enter your custom prompt here..." 
+              style="text-align: left; font-family: 'Times New Roman', Times, serif; font-style: italic;  width: 100%; padding: 12px; margin: 20px 0; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; font-size: 16px;"></textarea>
+    <div class="prompt-actions" style="text-align: center;">
+      <button id="saveCustomPromptBtn" class="nav-btn">Save Prompt</button>
+      <button id="resetCustomPromptBtn" class="nav-btn">Reset to Default</button>
+    </div>
+  </div>
+</div>
+
+  <!-- Main Content Area -->
+  <main class="main-content">
+
+    <script>
+      document.getElementById('uploadForm').addEventListener('submit', function() {
+      document.getElementById('welcomeMessage').style.display = 'none';
+      });
+    </script>
+    <div id="contentWrapper" style="display:none;">
+      
+      <!-- Your dynamically generated content (tabs, charts, etc.) goes here -->
+    </div>
+    <div class="right-section">
+      <!-- Main Tab Navigation for Columns -->
+      <div class="nav-tabs" id="columnTabs" role="tablist">
+        <!-- Tabs generated dynamically by JavaScript -->
+      </div>
+      <!-- Main Tab Content for each Column -->
+      <div class="tab-content" id="columnTabsContent">
+      </div>
+    </div>
+  </main>
+
+  <!-- Pipeline Section (Fixed at Bottom) -->
+  <div id="pipeline-section" class="bottom-nav">
+    <div id="dataset-imputation">
+      <form id="datasetImputationForm" method="POST" action="/impute-dataset">
+        <label for="datasetMethod">Impute Entire Dataset</label>
+        <select id="datasetMethod" name="method">
+          <option value="mean">Mean</option>
+          <option value="median">Median</option>
+          <option value="mode">Mode</option>
+          <option value="constant">Constant</option>
+          <option value="knn">KNN</option>
+          <option value="mice">MICE</option>
+          <option value="complete-case">Complete-Case</option>
+          <option value="random">Random</option>
+        </select>
+        <!-- Only shown if constant is selected -->
+        <div id="datasetConstantGroup" style="display: none;">
+          <label for="datasetConstantValue">Value:</label>
+          <input type="text" id="datasetConstantValue" name="constant_value"/>
+        </div>
+    </div>
+    <!-- Button to trigger dataset imputation -->
+    <button class="nav-btn" type="submit">Impute Dataset</button>
+  </form>
+    <!-- Pipeline Display -->
+    <div id="pipeline-container">
+      No pipeline steps added yet.
+      <!-- Pipeline steps dynamically added here -->
+    </div>
+    <button id="export-pipeline" class="nav-btn" onclick="exportPipeline()">Export Pipeline</button>
+    <button id="apply-pipeline" class="nav-btn" onclick="applyImportedPipeline()">Apply Pipeline</button>
+    <!-- Model Selection for AI Summary -->
+    <div id="modelSelection" class="model-selection">
+      <label for="modelSelect">Select AI Model:</label>
+      <select id="modelSelect">
+        <!-- Options populated dynamically by JavaScript -->
+      </select>
+    </div>
+    <button id="setModelBtn" class="nav-btn">Set Model</button>
+    <!-- AI Recommendation Section -->
+    <div id="aiRecommendation" class="ai-recommendation">
+      <button id="recommendBtn" class="nav-btn">Get AI Recommendation</button>
+      <div id="recommendationOutput"></div>
+    </div>
+    <!-- Dropdown(s) for Summarizing Stats -->
+    <div id="aiControl" class="ai-control">
+      <label for="statsTableSelect">Select Col.</label>
+      <select id="statsTableSelect"></select>
+    </div>
+    <button id="customizePromptBtn" class="nav-btn">Customize Prompt</button>
+  </div>
+
+  <!-- External JavaScript -->
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

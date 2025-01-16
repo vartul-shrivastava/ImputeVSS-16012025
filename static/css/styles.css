@@ -1,0 +1,826 @@
+
+    /* ---------- RESET & BASE STYLING ---------- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .sub-tab-content {
+      height: 100%; /* Make sure the chart fits its container */
+      max-height: 100%;
+      padding: 10px;
+      box-sizing: border-box; /* Ensure padding is accounted for in size */
+      overflow: hidden;
+    }
+    
+    .charts-container {
+      display: flex;
+      flex-direction: column;
+      flex: 1; /* Allow the charts container to grow within the layout */
+      max-height: 450px; /* Restrict overall height */
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+.charts-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Ensure the container takes the available height */
+}
+
+
+.graph {
+  align-items: center;
+  margin: 0 0;
+  width: 100%; /* Ensure the graph takes full width */
+  height: 100%; /* Make height responsive */
+  max-width: 550px; /* Optional: Limit max height */
+  overflow: hidden; /* Prevent overflow issues */
+}
+    
+
+    /* ---------- NAVIGATION BAR ---------- */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 15px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .navbar .brand {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #004aad;
+    }
+    .navbar ul {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .navbar ul li {
+      color: #000;
+      display: flex;
+      align-items: center;
+    }
+    .navbar ul li a,
+    .navbar ul li button,
+    .navbar ul li label {
+      color: #1e0000;
+      text-decoration: none;
+      background: none;
+      border: none;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    .navbar input[type="file"] {
+      cursor: pointer;
+    }
+
+    .navbar img{
+      width: 200px;
+    }
+
+    .datasetImputationForm{
+      display: flex;
+    }
+
+    #dataset-imputation {
+      display: flex;
+    }
+    /* ---------- FIXED SIDEBAR ---------- */
+    .sidebar {
+      padding: 5px;
+      position: fixed;
+      top: 120px;
+      left: 0;
+      width: 25%;
+      height: calc(100vh - 70px - 150px);
+      border-right: 1px solid rgba(255,255,255,0.3);
+      overflow-y: auto;
+      z-index: 200;
+      border-radius: 0 12px 12px 0;
+    }
+    .pipeline-step-container{
+      display: flex;
+    }
+    .pipeline-step-container > button{
+      padding: 6px 12px;
+      margin: 5px;
+      min-width: 200px;
+      background: rgb(244, 244, 244);
+      color: #004aad;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.7rem;
+      font-weight: bold;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+    /* Loading Overlay Styling */
+.loading-overlay {
+  background-image: url('/static/images/impute-vss-bg.png');
+  background-size: cover; /* Ensures the image covers the entire background */
+  background-position: center; /* Centers the image */
+  background-repeat: no-repeat; /* Prevents the image from repeating */
+  background-attachment: fixed; /* Keeps the image fixed during scrolling */
+  background-color: #fefefe;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* semi-transparent background */
+  z-index: 1200; /* make sure it appears over other elements */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-content {
+  background-image: url('/static/images/impute-vss-bg.png');
+  background-size: cover; /* Ensures the image covers the entire background */
+  background-position: center; /* Centers the image */
+  background-repeat: no-repeat; /* Prevents the image from repeating */
+  background-attachment: fixed; /* Keeps the image fixed during scrolling */
+  padding: 20px 30px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+/* Optional Spinner Styling */
+.spinner {
+  margin: 20px auto;
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-top-color: #004aad;
+  border-radius: 50%;
+  animation: spin 1s infinite linear;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+/* Greeting Overlay Styling */
+.greeting-overlay {
+  backdrop-filter: blur(10px); /* Adds a blur effect to the overlay */
+  background-image: url('/static/images/impute-vss-bg.png');
+  background-size: cover; /* Ensures the image covers the entire background */
+  background-position: center; /* Centers the image */
+  background-repeat: no-repeat; /* Prevents the image from repeating */
+  background-attachment: fixed; /* Keeps the image fixed during scrolling */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7); /* Semi-transparent dark background */
+  z-index: 1300; /* Ensure it is above other overlays */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.greeting-content {
+  background-image: url('/static/images/impute-vss-bg.png');
+  background-size: cover; /* Ensures the image covers the entire background */
+  background-position: center; /* Centers the image */
+  background-repeat: no-repeat; /* Prevents the image from repeating */
+  background-attachment: fixed; /* Keeps the image fixed during scrolling */
+  max-width: 600px;
+  width: 90%;
+  padding: 30px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.greeting-content h2 {
+  margin-bottom: 20px;
+}
+
+.greeting-content p {
+  margin-bottom: 20px;
+}
+
+.greeting-content ul {
+  list-style-type: none;
+  text-align: left;
+  margin: 10px auto;
+  padding: 0;
+}
+
+.greeting-content ul li::before {
+  content: "•";
+  margin-right: 8px;
+  color: #004aad;
+}
+.upload-prompt {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255,255,255,0.9);
+  padding: 30px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 1.2rem;
+  color: #333;
+  z-index: 100; /* make sure it's above the background, but below any overlays */
+}
+
+/* This targets the main Plotly SVG element */
+.js-plotly-plot svg {
+  background: transparent !important;
+}
+
+
+    /* ---------- MAIN CONTENT AREA ---------- */
+    .main-content {
+      margin-right: 50px;
+      margin-top: 100px;
+      margin-left: 25%;
+      overflow: auto;
+    }
+    /* ---------- COLUMN ANALYSIS TABS ---------- */
+    .nav-tabs {
+      display: flex;
+      border-bottom: 1px solid rgba(255,255,255,0.3);
+      margin-bottom: 10px;
+      overflow-x: auto;
+      padding-bottom: 5px;
+    }
+    .nav-tabs button {
+      padding: 10px 15px;
+      border: none;
+      background: rgba(255,255,255,0.6);
+      cursor: pointer;
+      font-size: 1rem;
+      border-radius: 8px 8px 0 0;
+      margin-right: 5px;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+    .nav-tabs button.active {
+      background: rgba(255,255,255,0.85);
+      border-bottom: 3px solid #290d60;
+      font-weight: bold;
+      color: #004aad;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #004aad;
+    }
+    .tab-content {
+      background: none;
+      padding: 15px 5px;
+      border: 1px solid rgba(255,255,255,0.3);
+      border-top: none;
+      border-radius: 0 0 12px 12px;
+      backdrop-filter: blur(8px);
+      overflow: auto;
+    }
+    .tab-pane {
+      display: none;
+      animation: fadeIn 0.3s ease-in;
+    }
+    .tab-pane.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    /* ---------- COLUMN CONTENT CONTAINER ---------- */
+    .column-content-container {
+      display: flex;
+      gap: 20px;
+    }
+    /* ---------- CHARTS CONTAINER & SUB-TABS ---------- */
+    .charts-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid rgba(255,255,255,0.3);
+      background: rgba(255,255,255,0.6);
+      border-radius: 8px;
+    }
+    .sub-nav-tabs {
+      display: flex;
+      background: rgba(255,255,255,0.7);
+      border-bottom: 1px solid rgba(255,255,255,0.3);
+    }
+    .sub-nav-tabs button {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      background: rgba(255,255,255,0.6);
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease;
+      font-size: 0.9rem;
+    }
+    .sub-nav-tabs button:hover {
+      background: rgba(255,255,255,0.8);
+    }
+    .sub-nav-tabs button.active {
+      background: rgba(255,255,255,0.85);
+      border-bottom: 3px solid #004aad;
+      font-weight: bold;
+      color: #004aad;
+    }
+    .chart-tab-content {
+      flex: 1;
+      padding: 10px;
+      display: none;
+      animation: fadeIn 0.3s ease-in;
+    }
+    .chart-tab-content.active {
+      display: block;
+    }
+    /* ---------- STATS TABLE CONTAINER ---------- */
+    .table-container {
+      color: #1a1a1a;
+      flex: 1;
+      max-height: 450px;
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 8px;
+      position: sticky;
+      overflow: auto;
+      padding: 10px;
+    }
+    .table-container table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .table-container thead {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+    .table-container th,
+    .table-container td {
+      padding: 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.3);
+      text-align: left;
+    }
+
+    .ai-control{
+      color: #004aad;
+      font-weight: bold;
+      font-size: 0.8rem;
+    }
+    .model-selection {
+      color: #004aad;
+      font-weight: bold;
+      font-size: 0.8rem;
+    }
+
+    #datasetImputationForm{
+      color: #004aad;
+      font-weight: bold;
+      font-size: 0.8rem;
+      margin: 10px;
+    }
+    /* ---------- PIPELINE SECTION ---------- */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(255,255,255,0.6);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid rgba(255,255,255,0.3);
+      padding: 15px;
+      z-index: 500;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      box-shadow: 0 -5px 10px rgba(0,0,0,0.1);
+    }
+    #pipeline-container {
+      color: whitesmoke;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #89a8d1, #e2e2e2);
+      padding: 10px;
+      min-width: 400px;
+      display: flex;
+      align-items: center;
+      overflow: auto;
+      gap: 10px;
+      flex: 1;
+    }
+    .pipeline-step {
+      display: flex;
+      align-items: center;
+      background: #FFF;
+      max-width: 500px;
+      max-height: 100px;
+      border: 2px solid #004aad;
+      border-radius: 20px;
+      padding: 6px 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      flex-shrink: 0;
+      transition: box-shadow 0.3s ease;
+    }
+    .pipeline-step:hover {
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+    .pipeline-step .step-name {
+      font-weight: 500;
+      margin-right: 8px;
+    }
+    .pipeline-step .remove-step {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: #004aad;
+      font-size: 1rem;
+      margin-left: auto;
+      padding: 0 4px;
+      transition: color 0.3s ease;
+    }
+
+    #pipelineSelect {
+      background-color: #FFF;
+      color: #333;
+      border: 1px solid #CCC;
+      min-width: 150px;
+      padding: 6px 10px;
+      appearance: none;
+      background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"><path fill="%23333" d="M6 8.4L2.4 4.8 3.6 3.6 6 6l2.4-2.4 1.2 1.2z"/></svg>');
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-size: 12px;
+    }
+    #pipelineSelect:focus {
+      outline: none;
+      border-color: #004aad;
+    }
+
+
+    /* Ensure the charts fit the container */
+.charts-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 8px;
+  overflow: hidden;
+  height: 100%; /* Set container height to fill the section */
+}
+
+.sub-tab-content {
+  flex: 1;
+  padding: 10px;
+  display: none;
+  animation: fadeIn 0.3s ease-in;
+  height: calc(100% - 40px); /* Adjust height dynamically */
+  max-height: 100%; /* Prevent overflow */
+  box-sizing: border-box; /* Include padding in the height calculation */
+}
+
+.sub-tab-content.active {
+  display: block;
+}
+
+.plot-container {
+  width: 100%;
+  height: 100%; /* Ensure the plot fills the available space */
+  max-height: 100%;
+}
+/* NAVBAR STYLING */
+
+.logo-section img {
+  max-height: 40px;
+}
+
+.nav-options {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.inline-form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+
+.nav-btn {
+  padding: 6px 12px;
+  background: rgb(244, 244, 244);
+  color: #004aad;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: bold;
+  transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.nav-btn:hover {
+  color: #ffffff;
+  background: #004aad;
+  box-shadow: 0 10px 10px rgba(181, 193, 255, 0.852);
+}
+
+.upload-label {
+  font-size: 0.9rem;
+  color: #252525;
+}
+
+input[type="file"] {
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 4px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background: #fff;
+}
+#correlation-chart {
+  width: 100%;
+  height: 400px;
+}
+
+/* RESPONSIVENESS */
+@media (max-width: 768px) {
+  .nav-options {
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+}
+/* Style for the select dropdown */
+select {
+  width: 100%; /* Full-width dropdown */
+  padding: 5px; /* Add padding for better usability */
+  font-size: 0.8rem; /* Larger font for readability */
+  border: 1px solid rgba(0, 0, 0, 0.3); /* Subtle border */
+  border-radius: 8px; /* Smooth rounded corners */
+  background-color: rgba(255, 255, 255, 0.9); /* Subtle white background */
+  color: #333; /* Text color */
+  appearance: none; /* Remove default browser styling */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  outline: none;
+}
+
+/* Hover state for select */
+select:hover {
+  border-color: #666; /* Slightly darker border */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Subtle shadow on hover */
+}
+
+/* Focus state for select */
+select:focus {
+  border-color: #004aad; /* Highlight border on focus */
+  box-shadow: 0 0 8px rgba(255, 111, 145, 0.5); /* Add focus shadow */
+  outline: none; /* Remove default focus outline */
+}
+
+/* Disabled state for select */
+select:disabled {
+  background-color: rgba(240, 240, 240, 0.9); /* Light gray background */
+  color: #999; /* Subtle text color */
+  border-color: rgba(200, 200, 200, 0.5); /* Light border */
+  cursor: not-allowed; /* Indicate it's disabled */
+}
+
+/* Optional: Add styles for options within the select */
+option {
+  font-size: 1rem; /* Match font size */
+  padding: 8px; /* Add padding for better readability */
+  color: #333; /* Default text color */
+}
+.imputation-reference-container {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  overflow-x: auto; /* Enable horizontal scrolling */
+  white-space: nowrap; /* Prevent line breaks */
+  background: rgba(255, 255, 255, 0.9); /* Subtle background */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1); /* Separator line */
+  border-radius: 8px 8px 0 0; /* Match the table's styling */
+  margin-bottom: 10px; /* Spacing below the reference bar */
+}
+
+/* Basic reset for the table */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 20px auto;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Style for the table header */
+table thead tr {
+  background-color: #577fae; /* change to your preferred header color */
+  color: #ffffff;
+  text-align: center;
+}
+
+table thead th {
+  padding: 12px;
+  font-size: 1rem;
+  font-weight: bold;
+  border: 1px solid #ddd;
+}
+
+/* Style for the table body */
+table tbody tr {
+  border-bottom: 1px solid #ddd;
+  transition: background-color 0.3s ease;
+}
+
+table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+table tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+table tbody td {
+  padding: 12px;
+  text-align: center;
+  font-size: 0.95rem;
+  border: 1px solid #ddd;
+}
+
+/* Optional: Add a subtle box shadow */
+table {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive adjustments: Make table scrollable on small screens */
+@media (max-width: 768px) {
+  .table-container {
+    overflow-x: auto;
+  }
+  
+  table, thead, tbody, th, td, tr {
+    display: block;
+  }
+  
+  thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+  
+  tr {
+    margin-bottom: 1rem;
+  }
+  
+  td {
+    text-align: right;
+    padding-left: 50%;
+    position: relative;
+  }
+  
+  td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 0;
+    width: 45%;
+    padding-left: 15px;
+    font-weight: bold;
+    text-align: left;
+  }
+}
+
+
+.imputation-reference-container button {
+  padding: 8px 12px;
+  background: #58779e; /* Theme color for buttons */
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+
+.imputation-reference-container button:disabled {
+  background: #ddd; /* Disabled button styling */
+  color: #666;
+  cursor: not-allowed;
+}
+
+.imputation-reference-container button span {
+  margin-left: 8px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+#recommendationOutput {
+  font-size: 1.1rem;
+  color: #333;
+}
+
+
+/* Slide-down animation */
+@keyframes slideDown {
+  from {transform: translateY(-50px); opacity: 0;}
+  to {transform: translateY(0); opacity: 1;}
+}
+
+/* Close button style */
+.close-overlay {
+  color: #aaa;
+  font-size: 28px;
+  font-weight: bold;
+  position: absolute;
+  right: 20px;
+  top: 10px;
+  cursor: pointer;
+}
+.close-overlay:hover,
+.close-overlay:focus {
+  color: #000;
+  text-decoration: none;
+}
+/* Overlay container - hidden by default */
+.ai-overlay {
+  backdrop-filter: blue(10px); /* Adds a blur effect to the overlay */
+  display: none; /* Hidden initially */
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+}
+
+/* Overlay Content */
+.ai-overlay-content {
+  backdrop-filter: blur(10px); /* Adds a blur effect to the overlay */
+  background-image: url('/static/images/impute-vss-bg.png');
+  background-size: cover; /* Ensures the image covers the entire background */
+  background-position: center; /* Centers the image */
+  background-repeat: no-repeat; /* Prevents the image from repeating */
+  background-attachment: fixed; /* Keeps the image fixed during scrolling */
+  background-color: #fefefe;
+  max-height: 400px;
+  overflow-y: auto;
+  background-color: #fefefe;
+  margin: 10% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  position: relative;
+  border-radius: 8px;
+  animation: slideDown 0.5s;
+}
+
+/* Slide-down animation */
+@keyframes slideDown {
+  from {transform: translateY(-50px); opacity: 0;}
+  to {transform: translateY(0); opacity: 1;}
+}
+
+/* Close button style */
+.close-overlay {
+  color: #aaa;
+  font-size: 28px;
+  font-weight: bold;
+  position: absolute;
+  right: 20px;
+  top: 10px;
+  cursor: pointer;
+}
+.close-overlay:hover,
+.close-overlay:focus {
+  color: #000;
+  text-decoration: none;
+}
+
+/* AI Control styling */
+.ai-control {
+  text-align: center;
+}
+body {
+  /* Create a grid pattern with two linear gradients */
+  background-color: #f7f7f7; /* Base background color */
+  background-image: 
+    linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(0,0,0,0.05) 1px, transparent 1px);
+  background-size: 20px 20px; /* Adjust grid spacing as needed */
+}
+
